@@ -28,8 +28,8 @@ page = st.sidebar.radio("Go to", ["HomePage", "Main Dashboard", "Dashboard 2","M
 # homepage access
 if page == 'HomePage':
     st.image('img.jpg', use_column_width=True) # inserting image for page
-    st.title("Olympic Analytics Dashboard")
     st.markdown("---") # border between prints
+    st.title("Olympic Analytics Dashboard")
     st.subheader("Welcome to the Olympic Analytics Dashboard!")
     st.write("Use the sidebar to navigate to different sections.")
 
@@ -207,67 +207,67 @@ elif page == 'Model Prediction':
     else:
         st.write("No data available for the selected year and athlete's attributes.")
 
-# Medal Prediction using Logistic Regression Model
-st.markdown("---")
-st.title('Medal Prediction using Logistic Regression Model :medal:' )
-
-# inputs for age, height, and weight range
-st.subheader("Model Training Parameters")
-min_age2, max_age2 = st.slider("Select Age Range", df['Age'].min(), df['Age'].max(), (df['Age'].min(), df['Age'].max()))
-min_height2, max_height2 = st.slider("Select Height Range", df['Height'].min(), df['Height'].max(), (df['Height'].min(), df['Height'].max()))
-min_weight2, max_weight2 = st.slider("Select Weight Range", df['Weight'].min(), df['Weight'].max(), (df['Weight'].min(), df['Weight'].max()))
-year_input2 = st.selectbox("Select Year", options=df['Year'].unique(), key="year_selectbox2")
-
-# Filter the dataset based on selected ranges
-filter_model2 = df[(df['Year'] == year_input2) &
-                (df['Age'] >= min_age2) & (df['Age'] <= max_age2) &
-                (df['Height'] >= min_height2) & (df['Height'] <= max_height2) &
-                (df['Weight'] >= min_weight2) & (df['Weight'] <= max_weight2)]
-
-X2 = filter_model2[['Age', 'Height', 'Weight']]
-y2 = filter_model2['Medal'].apply(lambda x: 'Yes' if x != 'No Medal' else 'No')
-
-# Train-test split
-X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
-
-# Model training
-model2 = LogisticRegression()
-model2.fit(X_train2, y_train2)
-
-# Model evaluation
-y_pred2 = model2.predict(X_test2)
-accuracy2 = accuracy_score(y_test2, y_pred2)
-f12 = f1_score(y_test2, y_pred2, pos_label='Yes')
-recall2 = recall_score(y_test2, y_pred2, pos_label='Yes')
-
-# Confusion matrix
-cm2 = confusion_matrix(y_test2, y_pred2)
-
-# Map numerical values to 'Yes' and 'No'
-labels2 = ['Yes', 'No']
-cm_df2 = pd.DataFrame(cm2, index=labels2, columns=labels2)
-
-# Get actual medals from the dataset for the test set
-actual_medals2 = filter_model2.loc[y_test2.index, 'Medal']
-
-# side-by-side visualization 
-col1, col2 = st.columns(2)
-
-with col1:
-    # Visualize Confusion Matrix
-    st.subheader("Confusion Matrix")
-    sns.heatmap(cm_df2, annot=True, cmap='Blues', fmt='g', xticklabels=labels2, yticklabels=labels2)
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    st.pyplot()
+    # Medal Prediction using Logistic Regression Model
     st.markdown("---")
+    st.title('Medal Prediction using Logistic Regression Model :medal:' )
 
-with col2:
-# Display evaluation metrics and predicted/actual results in a table
-    st.subheader("Evaluation Metrics and Results")
-    metrics_data2 = {
-        'Metric': ['Accuracy', 'F1 Score', 'Recall', 'Predicted Result', 'Actual Result', 'Actual Medal'],
-        'Value': [accuracy2, f12, recall2, y_pred2[0], y_test2.iloc[0], actual_medals2.iloc[0]]
-    }
-    metrics_df2 = pd.DataFrame(metrics_data2)
-    st.table(metrics_df2)
+    # inputs for age, height, and weight range
+    st.subheader("Model Training Parameters")
+    min_age2, max_age2 = st.slider("Select Age Range", df['Age'].min(), df['Age'].max(), (df['Age'].min(), df['Age'].max()))
+    min_height2, max_height2 = st.slider("Select Height Range", df['Height'].min(), df['Height'].max(), (df['Height'].min(), df['Height'].max()))
+    min_weight2, max_weight2 = st.slider("Select Weight Range", df['Weight'].min(), df['Weight'].max(), (df['Weight'].min(), df['Weight'].max()))
+    year_input2 = st.selectbox("Select Year", options=df['Year'].unique(), key="year_selectbox2")
+
+    # Filter the dataset based on selected ranges
+    filter_model2 = df[(df['Year'] == year_input2) &
+                    (df['Age'] >= min_age2) & (df['Age'] <= max_age2) &
+                    (df['Height'] >= min_height2) & (df['Height'] <= max_height2) &
+                    (df['Weight'] >= min_weight2) & (df['Weight'] <= max_weight2)]
+
+    X2 = filter_model2[['Age', 'Height', 'Weight']]
+    y2 = filter_model2['Medal'].apply(lambda x: 'Yes' if x != 'No Medal' else 'No')
+
+    # Train-test split
+    X_train2, X_test2, y_train2, y_test2 = train_test_split(X2, y2, test_size=0.2, random_state=42)
+
+    # Model training
+    model2 = LogisticRegression()
+    model2.fit(X_train2, y_train2)
+
+    # Model evaluation
+    y_pred2 = model2.predict(X_test2)
+    accuracy2 = accuracy_score(y_test2, y_pred2)
+    f12 = f1_score(y_test2, y_pred2, pos_label='Yes')
+    recall2 = recall_score(y_test2, y_pred2, pos_label='Yes')
+
+    # Confusion matrix
+    cm2 = confusion_matrix(y_test2, y_pred2)
+
+    # Map numerical values to 'Yes' and 'No'
+    labels2 = ['Yes', 'No']
+    cm_df2 = pd.DataFrame(cm2, index=labels2, columns=labels2)
+
+    # Get actual medals from the dataset for the test set
+    actual_medals2 = filter_model2.loc[y_test2.index, 'Medal']
+
+    # side-by-side visualization 
+    col1, col2 = st.columns(2)
+
+    with col1:
+        # Visualize Confusion Matrix
+        st.subheader("Confusion Matrix")
+        sns.heatmap(cm_df2, annot=True, cmap='Blues', fmt='g', xticklabels=labels2, yticklabels=labels2)
+        plt.xlabel('Predicted')
+        plt.ylabel('Actual')
+        st.pyplot()
+        st.markdown("---")
+
+    with col2:
+    # Display evaluation metrics and predicted/actual results in a table
+        st.subheader("Evaluation Metrics and Results")
+        metrics_data2 = {
+            'Metric': ['Accuracy', 'F1 Score', 'Recall', 'Predicted Result', 'Actual Result', 'Actual Medal'],
+            'Value': [accuracy2, f12, recall2, y_pred2[0], y_test2.iloc[0], actual_medals2.iloc[0]]
+        }
+        metrics_df2 = pd.DataFrame(metrics_data2)
+        st.table(metrics_df2)
